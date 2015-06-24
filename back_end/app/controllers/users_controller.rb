@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.create user_params
-    @user.name = Faker::Commerce.color + SecureRandom.hex(2)
+    @user.name = Faker::Team.creature + SecureRandom.hex(2)
     @user.token = SecureRandom.hex(8)
     if @user.save
       render :show, status: 201
