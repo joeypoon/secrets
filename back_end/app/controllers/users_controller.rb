@@ -12,7 +12,8 @@ class UsersController < ApplicationController
   end
 
   def login
-    if set_user.authenticate user_params[:password]
+    @user = find_user_by_email
+    if @user.authenticate user_params[:password]
       render :show, status: 200
     else
       render json: { invalid: 'Incorrect email/password combination' }, status: 401
@@ -22,11 +23,6 @@ class UsersController < ApplicationController
   private
 
     def show
-      set_user
-    end
-
-    def set_user
-      @user = User.find_by email: user_params[:email]
     end
 
     def user_params
