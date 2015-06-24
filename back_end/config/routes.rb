@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  post '/login' => 'users#login'
+
   post '/users' => 'users#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
