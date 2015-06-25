@@ -1,6 +1,10 @@
 <nav class="nav navbar-default">
+  {{#link-to 'posts'}}Home{{/link-to}}
+  {{#link-to 'posts.newPost'}}New Post{{/link-to}}
 </nav>
 
 <div class="container">
+  <h1 class="page-header">Secrets</h1>
+
   {{outlet}}
 </div>
