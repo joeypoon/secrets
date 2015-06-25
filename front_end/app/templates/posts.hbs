@@ -1,9 +1,13 @@
 {{outlet}}
 
-{{#each post in model}}
+<div id="posts-list">
+
+  {{#each post in model}}
 
 
-  {{posts-post post=post}}
+    {{posts-post post=post}}
 
 
-{{/each}}
+  {{/each}}
+
+</div>

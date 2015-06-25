@@ -1,3 +1,9 @@
+* {
+  font-family: helvetica;
+  letter-spacing: .05em;
+  font-size: 1.7rem;
+}
+
 #whisper-form {
   margin-bottom: 3em;
 }
