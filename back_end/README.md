@@ -5,7 +5,7 @@
     Login: post '/login.json'
     Create: post '/users.json' | required params: email, password, password_confirmation
 
-    Response:
+    Example response:
     {
       "id": 8,
       "name": "vixens3730",
@@ -17,7 +17,7 @@
     Get recent 20: get '/posts.json'
     Create: post '/posts.json?token={user_token}' | required params: title, content
 
-    Response:
+    Example response:
     [
       {
           "id": 20,
