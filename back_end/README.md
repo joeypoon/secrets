@@ -3,7 +3,7 @@
 #### User
 
     Login: post '/login.json'
-    Create: post '/users.json' \| required params: email, password, password_confirmation
+    Create: post '/users.json' | required params: email, password, password_confirmation
 
     Response:
     {
@@ -15,7 +15,7 @@
 #### Posts
 
     Get recent 20: get '/posts.json'
-    Create: post '/posts.json?token={user_token}' \| required params: title, content
+    Create: post '/posts.json?token={user_token}' | required params: title, content
 
     Response:
     [
