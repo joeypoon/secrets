@@ -12,6 +12,7 @@ Router.map(function() {
 
   this.resource('users', function(){
     this.route('newUser');
+    this.route('login');
   });
 });
 

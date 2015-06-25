@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   end
 
   def find_user_by_email
-    User.find_by email: params[:email]
+    User.find_by email: params[:user][:email]
   end
 
 end

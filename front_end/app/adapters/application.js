@@ -1,4 +1,4 @@
 import DS from 'ember-data';
 
-export default DS.RESTadapter.extend({
+export default DS.FixtureAdapter.extend({
 });
