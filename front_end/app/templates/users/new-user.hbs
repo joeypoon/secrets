@@ -1,0 +1,17 @@
+<form class="col-md-6" id="new-user-form" {{action "newUser" on="submit"}}>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" class="form-control" id="email" required>
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" required>
+  </div>
+  <div class="form-group">
+    <label for="password-confirmation">Password Confirmation</label>
+    <input type="password" class="form-control" id="password-confirmation" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Start whispering...</button>
+</form>
+
+{{outlet}}
