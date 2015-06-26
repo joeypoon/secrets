@@ -8,7 +8,12 @@ export default Ember.Route.extend({
 
   actions: {
     newPost: function () {
-      $.post( "http://localhost:3000/posts.json?token=" + this.store.token, { post: { content: $('#whisper').val() } } );
+      var x = this.store.all('user')
+      var user = null
+      x.forEach((value) => {
+        user = value.toJSON()
+      })
+      $.post( `http://localhost:3000/posts.json?token=${user.token}`, { post: { content: $('#whisper').val() } } );
     }
   }
 

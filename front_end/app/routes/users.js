@@ -8,12 +8,17 @@ export default Ember.Route.extend({
     },
 
     login: function() {
-      reponse = $.post( "http://localhost:3000/login.json", { user: { email: $('#email').val(), password: $('#password').val() } })
-      .done(function(data) {
-        if (data) {
-          //save token for session
+      var data = {
+        user: {
+          email: $('#email').val(),
+          password: $('#password').val()
         }
-      });
+      }
+
+      $.post( "http://localhost:3000/login.json", data).done((data) => {
+          this.store.push('user', this.store.normalize('user', data));
+          this.transitionTo('posts.newPost')
+      })
     }
 
   }
