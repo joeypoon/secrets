@@ -1,3 +1,5 @@
+var postsURL = "http://localhost:3000/posts.json"
+
 var Post = React.createClass({
 
   render: function() {
@@ -39,6 +41,12 @@ var PostForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
+    var content = React.findDOMNode(this.refs.content).value.trim();
+    if (!content) {
+      return;
+    }
+    this.props.onPostSubmit({post: {content: content}});
+    React.findDOMNode(this.refs.content).value = '';
   },
 
   render: function() {
@@ -61,16 +69,34 @@ var PostBox = React.createClass({
     return {posts: []};
   },
 
+  handlePostSubmit: function(post) {
+    var posts = this.state.posts;
+    var newPosts = posts.concat([post]);
+    this.setState({post: newPosts});
+    $.ajax({
+      url: "http://localhost:3000/posts.json?token=4012c9e1c0c04bb0",
+      dataType: 'json',
+      type: 'POST',
+      data: post,
+      success: function(posts) {
+        this.setState({posts: posts});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(postsURL, status, err.toString());
+      }.bind(this)
+    });
+  },
+
   loadPostsFromServer: function() {
     $.ajax({
-      url: "http://localhost:3000/posts.json",
+      url: postsURL,
       dataType: 'json',
       cache: false,
       success: function(posts) {
         this.setState({posts: posts});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(postsURL, status, err.toString());
       }.bind(this)
     });
   },
@@ -84,7 +110,7 @@ var PostBox = React.createClass({
     return (
       <div className="postBox">
         <h1 className="page-header">Secrets</h1>
-        <PostForm />
+        <PostForm onPostSubmit={this.handlePostSubmit} />
         <div className="clearfix"></div>
         <PostList posts={this.state.posts} />
       </div>
