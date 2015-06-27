@@ -4,10 +4,10 @@ var Post = React.createClass({
     return (
     <div className="panel panel-info">
       <div className="panel-heading">
-        <h3 className="panel-title">{this.props.post.user.name}</h3>
+        <h3 className="panel-title">{this.props.username}</h3>
       </div>
       <div className="panel-body">
-        {this.props.post.content}
+        {this.props.children}
       </div>
     </div>
     );
@@ -15,23 +15,44 @@ var Post = React.createClass({
 
 });
 
-// var PostList = React.createClass({
-//
-//   render: function() {
-//
-//   }
-//
-// });
+var PostList = React.createClass({
 
-var post = {
-  content: "This is some content",
-  user: {
-    id: 1,
-    name: "bunnies12af"
+  render: function() {
+    var postNodes = this.props.posts.map(function(post) {
+      return (
+        <Post username={post.user.name}>
+          {post.content}
+        </Post>
+      );
+    });
+
+    return (
+      <div className="postList">
+        {postNodes}
+      </div>
+    );
   }
-};
+
+});
+
+var posts = [
+  {
+    content: "This is some content",
+    user: {
+      id: 1,
+      name: "bunnies12af"
+    }
+  },
+  {
+    content: "This is some more content",
+    user: {
+      id: 2,
+      name: "kittens12af"
+    }
+  }
+]
 
 React.render(
-  <Post post={post} />,
+  <PostList posts={posts} />,
   document.getElementById('content')
 );
