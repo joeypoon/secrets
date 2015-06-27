@@ -13,7 +13,9 @@ export default Ember.Route.extend({
       x.forEach((value) => {
         user = value.toJSON()
       })
-      $.post( `http://localhost:3000/posts.json?token=${user.token}`, { post: { content: $('#whisper').val() } } );
+      $.post( `http://localhost:3000/posts.json?token=${user.token}`, { post: { content: $('#whisper').val() } } ).done((data) => {
+          window.location.reload(true);
+      })
     }
   }
 
