@@ -1,5 +1,3 @@
-var postsURL = "http://localhost:3000/posts.json"
-
 var Post = React.createClass({
 
   render: function() {
@@ -89,7 +87,7 @@ var PostBox = React.createClass({
 
   loadPostsFromServer: function() {
     $.ajax({
-      url: postsURL,
+      url: this.props.postsURL,
       dataType: 'json',
       cache: false,
       success: function(posts) {
@@ -120,6 +118,6 @@ var PostBox = React.createClass({
 });
 
 React.render(
-  <PostBox pollInterval={10000} />,
+  <PostBox usersURL="http://localhost:3000/users.json" postsURL="http://localhost:3000/posts.json" pollInterval={10000} />,
   document.getElementById('content')
 );
