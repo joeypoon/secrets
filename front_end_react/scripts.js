@@ -1,3 +1,5 @@
+var baseurl = "http://localhost:3000/";
+
 var Post = React.createClass({
 
   render: function() {
@@ -49,13 +51,25 @@ var PostForm = React.createClass({
 
   render: function() {
     return (
-      <form className="postForm col-md-6" id="whisper-form" onSubmit={this.handleSubmit}>
-        <div className="form-group">
-          <label for="whisper">Whisper</label>
-          <textarea className="form-control" id="whisper" placeholder="share a secret..." rows="5" ref="content"></textarea>
+      <div className="modal fade" id="new-post-modal" tabIndex="-1">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">New Whisper</h4>
+            </div>
+            <div className="modal-body" id="new-post-modal-body">
+              <form className="postForm" id="whisper-form" onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                  <label for="whisper">Whisper</label>
+                  <textarea className="form-control" id="whisper" placeholder="share a secret..." rows="5" ref="content" autoFocus></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary btn-block">Whisper</button>
+              </form>
+            </div>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary btn-block">Whisper</button>
-      </form>
+      </div>
     );
   }
 
@@ -71,7 +85,6 @@ var PostBox = React.createClass({
     var posts = this.state.posts;
     var newPosts = posts.concat([post]);
     this.setState({post: newPosts});
-    console.log(this.state.token);
     $.ajax({
       url: "http://localhost:3000/posts.json?token=" + sessionStorage.token,
       dataType: 'json',
@@ -84,6 +97,7 @@ var PostBox = React.createClass({
         console.error(postsURL, status, err.toString());
       }.bind(this)
     });
+    $('#new-post-modal').modal('hide');
   },
 
   loadPostsFromServer: function() {
@@ -137,7 +151,7 @@ var NavBar = React.createClass({
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav navbar-right">
-              <li><a href="#">New Post</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#new-post-modal">New Post</a></li>
               <li><a href="#" id="logout">Logout</a></li>
             </ul>
           </div>
@@ -181,8 +195,8 @@ var LoginForm = React.createClass({
     if (!email || !password) {
       return;
     }
-    var email = React.findDOMNode(this.refs.email).value.trim();
-    var password = React.findDOMNode(this.refs.password).value.trim();
+    React.findDOMNode(this.refs.email).value = '';
+    React.findDOMNode(this.refs.password).value = '';
     this.handleLoginSubmit({user:{email: email, password: password}});
   },
 
@@ -223,20 +237,51 @@ var LoginForm = React.createClass({
 
 var SignUpForm = React.createClass({
 
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var email = React.findDOMNode(this.refs.email).value.trim();
+    var password = React.findDOMNode(this.refs.password).value.trim();
+    var password_confirmation = React.findDOMNode(this.refs.password_confirmation).value.trim();
+    if (!email || !password) {
+      return;
+    }
+    React.findDOMNode(this.refs.email).value = '';
+    React.findDOMNode(this.refs.password).value = '';
+    React.findDOMNode(this.refs.password_confirmation).value = '';
+    this.handleLoginSubmit({user:{email: email, password: password, password_confirmation: password_confirmation}});
+  },
+
+  handleLoginSubmit: function(loginInfo) {
+    $.ajax({
+      url: this.props.signupURL,
+      dataType: 'json',
+      type: 'POST',
+      data: loginInfo,
+      success: function(user) {
+        sessionStorage.setItem('token', user.token);
+        $('#signup-modal').modal('hide');
+        renderNav();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.signupURL, status, err.toString());
+      }.bind(this)
+    });
+  },
+
   render: function() {
     return (
-      <form className="signUpForm" id="new-user-form">
+      <form className="signUpForm" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <label for="email">Email</label>
-          <input type="email" className="form-control" id="email" required />
+          <input type="email" className="form-control" id="email" ref="email" required />
         </div>
         <div className="form-group">
           <label for="password">Password</label>
-          <input type="password" className="form-control" id="password" required />
+          <input type="password" className="form-control" id="password" ref="password" required />
         </div>
         <div className="form-group">
           <label for="password-confirmation">Password Confirmation</label>
-          <input type="password" className="form-control" id="password-confirmation" required />
+          <input type="password" className="form-control" id="password-confirmation" ref="password_confirmation" required />
         </div>
         <button type="submit" className="btn btn-primary btn-block">Start whispering...</button>
       </form>
