@@ -1,4 +1,7 @@
-var baseurl = "http://localhost:3000/";
+var baseurl = "https://secrets-back-end.herokuapp.com";
+var postsURL = baseurl + "/posts.json";
+var usersURL = baseurl + "/users.json";
+var loginURL = baseurl + "/login.json";
 
 var Post = React.createClass({
 
@@ -86,7 +89,7 @@ var PostBox = React.createClass({
     var newPosts = posts.concat([post]);
     this.setState({post: newPosts});
     $.ajax({
-      url: "http://localhost:3000/posts.json?token=" + sessionStorage.token,
+      url: this.props.postsURL + "?token=" + sessionStorage.token,
       dataType: 'json',
       type: 'POST',
       data: post,
@@ -94,7 +97,7 @@ var PostBox = React.createClass({
         this.setState({posts: posts});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(postsURL, status, err.toString());
+        console.error(this.props.postsURL, status, err.toString());
       }.bind(this)
     });
     $('#new-post-modal').modal('hide');
@@ -298,17 +301,17 @@ var renderNav = function() {
 }
 
 React.render(
-  <PostBox postsURL="http://localhost:3000/posts.json" pollInterval={100000} />,
+  <PostBox postsURL={postsURL} pollInterval={100000} />,
   document.getElementById('content')
 );
 
 React.render(
-  <LoginForm loginURL="http://localhost:3000/login.json" />,
+  <LoginForm loginURL={loginURL} />,
   document.getElementById('login-modal-body')
 );
 
 React.render(
-  <SignUpForm signupURL="http://localhost:3000/users.json" />,
+  <SignUpForm signupURL={usersURL} />,
   document.getElementById('signup-modal-body')
 );
 
