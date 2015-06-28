@@ -65,7 +65,7 @@ var PostForm = React.createClass({
               <form className="postForm" id="whisper-form" onSubmit={this.handleSubmit}>
                 <div className="form-group">
                   <label for="whisper">Whisper</label>
-                  <textarea className="form-control" id="whisper" placeholder="share a secret..." rows="5" ref="content" autoFocus></textarea>
+                  <textarea className="form-control" id="whisper" placeholder="share a secret..." rows="5" ref="content" required></textarea>
                 </div>
                 <button type="submit" className="btn btn-primary btn-block">Whisper</button>
               </form>
@@ -149,7 +149,7 @@ var NavBar = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a href="#" className="navbar-brand">Secrets</a>
+            <a href="http://joeypoon.com/secrets/" className="navbar-brand">Secrets</a>
           </div>
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -172,7 +172,7 @@ var NavBar = React.createClass({
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <a href="#" className="navbar-brand">Secrets</a>
+              <a href="http://joeypoon.com/secrets/" className="navbar-brand">Secrets</a>
             </div>
 
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -209,10 +209,16 @@ var LoginForm = React.createClass({
       dataType: 'json',
       type: 'POST',
       data: loginInfo,
+      statusCode: {
+        401: function() {
+          $('#login-form-alert').html('Invalid email/password combination');
+          $('#login-form-alert').show();
+        }
+      },
       success: function(user) {
         sessionStorage.setItem('token', user.token);
-        $('#login-modal').modal('hide');
         renderNav();
+        $('#login-modal').modal('hide');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.loginURL, status, err.toString());
@@ -222,17 +228,30 @@ var LoginForm = React.createClass({
 
   render: function() {
     return (
-      <form className="loginForm" onSubmit={this.handleSubmit}>
-        <div className="form-group">
-          <label for="email">Email</label>
-          <input type="email" className="form-control" id="email" ref="email" required />
+      <div className="modal fade" id="login-modal" tabIndex="-1">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">Login</h4>
+            </div>
+            <div className="modal-body" id="login-modal-body">
+              <form className="loginForm" onSubmit={this.handleSubmit}>
+                <div className="alert alert-danger" id="login-form-alert"></div>
+                <div className="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" className="form-control" id="email" ref="email" required />
+                </div>
+                <div className="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" className="form-control" id="password" ref="password" required />
+                </div>
+                <button type="submit" className="btn btn-primary btn-block">Login</button>
+              </form>
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label for="password">Password</label>
-          <input type="password" className="form-control" id="password" ref="password" required />
-        </div>
-        <button type="submit" className="btn btn-primary btn-block">Login</button>
-      </form>
+      </div>
     );
   }
 
@@ -247,6 +266,10 @@ var SignUpForm = React.createClass({
     var password_confirmation = React.findDOMNode(this.refs.password_confirmation).value.trim();
     if (!email || !password) {
       return;
+    } else if (password != password_confirmation) {
+      $('#signup-form-alert').html('Passwords must match');
+      $('#signup-form-alert').show();
+      return;
     }
     React.findDOMNode(this.refs.email).value = '';
     React.findDOMNode(this.refs.password).value = '';
@@ -260,6 +283,12 @@ var SignUpForm = React.createClass({
       dataType: 'json',
       type: 'POST',
       data: loginInfo,
+      statusCode: {
+        422: function() {
+          $('#signup-form-alert').html('Email is taken');
+          $('#signup-form-alert').show();
+        }
+      },
       success: function(user) {
         sessionStorage.setItem('token', user.token);
         $('#signup-modal').modal('hide');
@@ -273,21 +302,34 @@ var SignUpForm = React.createClass({
 
   render: function() {
     return (
-      <form className="signUpForm" onSubmit={this.handleSubmit}>
-        <div className="form-group">
-          <label for="email">Email</label>
-          <input type="email" className="form-control" id="email" ref="email" required />
+      <div className="modal fade" id="signup-modal" tabIndex="-1">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">Sign Up</h4>
+            </div>
+            <div className="modal-body" id="signup-modal-body">
+              <form className="signUpForm" onSubmit={this.handleSubmit}>
+                <div className="alert alert-danger" id="signup-form-alert"></div>
+                <div className="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" className="form-control" id="email" ref="email" required />
+                </div>
+                <div className="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" className="form-control" id="password" ref="password" required />
+                </div>
+                <div className="form-group">
+                  <label for="password-confirmation">Password Confirmation</label>
+                  <input type="password" className="form-control" id="password-confirmation" ref="password_confirmation" required />
+                </div>
+                <button type="submit" className="btn btn-primary btn-block">Start whispering...</button>
+              </form>
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label for="password">Password</label>
-          <input type="password" className="form-control" id="password" ref="password" required />
-        </div>
-        <div className="form-group">
-          <label for="password-confirmation">Password Confirmation</label>
-          <input type="password" className="form-control" id="password-confirmation" ref="password_confirmation" required />
-        </div>
-        <button type="submit" className="btn btn-primary btn-block">Start whispering...</button>
-      </form>
+      </div>
     );
   }
 
@@ -295,24 +337,24 @@ var SignUpForm = React.createClass({
 
 var renderNav = function() {
   React.render(
-  <NavBar />,
-  document.getElementById('nav')
+    <NavBar />,
+    document.getElementById('nav')
   );
 }
 
 React.render(
-  <PostBox postsURL={postsURL} pollInterval={100000} />,
+  <PostBox postsURL={postsURL} pollInterval={120000} />,
   document.getElementById('content')
 );
 
 React.render(
   <LoginForm loginURL={loginURL} />,
-  document.getElementById('login-modal-body')
+  document.getElementById('login')
 );
 
 React.render(
   <SignUpForm signupURL={usersURL} />,
-  document.getElementById('signup-modal-body')
+  document.getElementById('signup')
 );
 
 renderNav();
