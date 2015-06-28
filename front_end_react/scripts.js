@@ -160,8 +160,8 @@ var NavBar = React.createClass({
 
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav navbar-right">
-                <li><a href="#">Sign Up</a></li>
-                <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#signup-modal">Sign Up</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
               </ul>
             </div>
           </div>
@@ -221,6 +221,30 @@ var LoginForm = React.createClass({
 
 });
 
+var SignUpForm = React.createClass({
+
+  render: function() {
+    return (
+      <form className="signUpForm" id="new-user-form">
+        <div className="form-group">
+          <label for="email">Email</label>
+          <input type="email" className="form-control" id="email" required />
+        </div>
+        <div className="form-group">
+          <label for="password">Password</label>
+          <input type="password" className="form-control" id="password" required />
+        </div>
+        <div className="form-group">
+          <label for="password-confirmation">Password Confirmation</label>
+          <input type="password" className="form-control" id="password-confirmation" required />
+        </div>
+        <button type="submit" className="btn btn-primary btn-block">Start whispering...</button>
+      </form>
+    );
+  }
+
+});
+
 var renderNav = function() {
   React.render(
   <NavBar />,
@@ -236,6 +260,11 @@ React.render(
 React.render(
   <LoginForm loginURL="http://localhost:3000/login.json" />,
   document.getElementById('login-modal-body')
+);
+
+React.render(
+  <SignUpForm signupURL="http://localhost:3000/users.json" />,
+  document.getElementById('signup-modal-body')
 );
 
 renderNav();
