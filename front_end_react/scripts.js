@@ -364,5 +364,10 @@ $(document).ready(function() {
     e.preventDefault();
     sessionStorage.removeItem('token');
     renderNav();
-  })
-})
+  });
+
+  $('#signup-form-alert').hide();
+
+  $('#login-form-alert').hide();
+
+});
