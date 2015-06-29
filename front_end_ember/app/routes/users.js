@@ -4,7 +4,13 @@ export default Ember.Route.extend({
 
   actions: {
     newUser: function() {
-      $.post( "http://localhost:3000/users.json", { user: { email: $('#email').val(), password: $('#password').val(), password_confirmation: $('#password_confirmation').val() } } );
+      $.post("http://secrets-back-end.herokuapp.com/users.json", { user: { email: $('#email').val(), password: $('#password').val(), password_confirmation: $('#password_confirmation').val() } } ).done(data, function() {
+        sessionStorage.setItem('token', data.token);
+      });
+    },
+
+    logout: function() {
+      sessionStorage.removeItem('token');
     },
 
     login: function() {
@@ -15,8 +21,8 @@ export default Ember.Route.extend({
         }
       }
 
-      $.post( "http://localhost:3000/login.json", data).done((data) => {
-          this.store.push('user', this.store.normalize('user', data));
+      $.post("http://secrets-back-end.herokuapp.com/login.json", data).done((data) => {
+          sessionStorage.setItem('token', data.token);
           this.transitionTo('posts.newPost')
       })
     }
