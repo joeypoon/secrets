@@ -3,6 +3,8 @@ var postsURL = baseurl + "/posts.json";
 var usersURL = baseurl + "/users.json";
 var loginURL = baseurl + "/login.json";
 
+React.initializeTouchEvents(true);
+
 var Post = React.createClass({
 
   render: function() {
