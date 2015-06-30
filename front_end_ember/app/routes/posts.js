@@ -4,6 +4,7 @@ export default Ember.Route.extend({
 
   model: function() {
     return $.getJSON("http://secrets-back-end.herokuapp.com/posts.json");
+    // this.store.createRecord('posts', $.getJSON("http://secrets-back-end.herokuapp.com/posts.json"));
   },
 
   actions: {
