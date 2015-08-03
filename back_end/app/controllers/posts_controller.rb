@@ -6,7 +6,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new post_params
-    @post.user_id = find_user_by_token.id
+    @post.user_id = current_user.id
     if @post.save
       @posts = get_posts
       render :index, status: 201
